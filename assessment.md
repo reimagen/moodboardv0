@@ -7,7 +7,7 @@
 ## Strengths
 - Tight, guided progression reduces cognitive load; automatic transitions keep momentum.
 - Role separation across Gemini models matches latency/quality needs (Flash for search, Pro for generation, Lite for summaries).
-- In-UI gating (selection counts, manifesto only after moodboard ready) provides basic quality control.
+- In-UI gating (selection counts, aesthetic guide only after moodboard ready) provides basic quality control.
 
 ## Gaps & Risks
 - No backend/storage layer defined: unclear where uploads, generated images, or search results are stored, how signed URLs are managed, or how sessions persist across refreshes; pure client state risks data loss and large-memory blobs.

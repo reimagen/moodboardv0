@@ -36,7 +36,7 @@ flowchart TD
     CheckMoodboard -->|No| CheckRegenerate{Regenerate<br/>More Images?}
     CheckRegenerate -->|Yes, New Config| Generate
     CheckRegenerate -->|Change Brand| Select
-    CheckMoodboard -->|Yes| Synthesize[User Clicks<br/>Synthesize Manifesto]
+    CheckMoodboard -->|Yes| Synthesize[User Clicks<br/>Synthesize Aesthetic Guide]
 
     Synthesize --> AIManifesto{AI Generates<br/>Aesthetic Summary<br/>Gemini 2.5 Flash Lite}
     AIManifesto -->|Automatic| Moodboard[Step 5: MOODBOARD<br/>Final View]
@@ -101,12 +101,12 @@ flowchart TD
     │              │  → Build moodboard (min 5)
     │              │  → Configure & regenerate
     └──────┬───────┘
-           │ (manual: click "Synthesize Manifesto")
+           │ (manual: click "Synthesize Aesthetic Guide")
            ▼
     ┌──────────────┐
     │   STEP 5     │
     │  MOODBOARD   │  → View final moodboard
-    │              │  → Read aesthetic manifesto
+    │              │  → Read aesthetic guide
     │              │  → Optional: AI remix images
     └──────────────┘
 ```
@@ -184,7 +184,7 @@ flowchart TD
 - Configure resolution (1K, 2K, 4K)
 - Click "Regenerate" for new batch
 - Click "Change References" to go back
-- Click "Synthesize Manifesto" when moodboard complete
+- Click "Synthesize Guide" when moodboard complete
 
 **System Actions**:
 - Generates 4 variations using `generateProImage()` (Gemini 3 Pro Image)
@@ -192,7 +192,7 @@ flowchart TD
 - Tracks moodboard count (minimum 5 required)
 - Shows progress bar
 
-**Exit Condition**: Manual click on "Synthesize Manifesto" (requires ≥5 moodboard images)
+**Exit Condition**: Manual click on "Synthesize Guide" (requires ≥5 moodboard images)
 
 ---
 
@@ -201,7 +201,7 @@ flowchart TD
 
 **Layout**:
 - Sidebar: Configuration + full moodboard collection
-- Main area: Aesthetic Manifesto summary
+- Main area: Aesthetic Guide summary
 
 **User Actions**:
 - Review final moodboard
@@ -280,7 +280,7 @@ Step 4: GENERATE
 │       └─→ Generates 4 variations per batch
 │       └─→ Combines product + brand aesthetic
 
-Step 5: MOODBOARD (Manifesto)
+Step 5: MOODBOARD (Aesthetic Guide)
 ├─→ generateAestheticSummary()
 │   └─→ Gemini 2.5 Flash Lite (gemini-2.5-flash-lite-002)
 │       └─→ Creates 3-sentence aesthetic summary
@@ -344,7 +344,7 @@ AI Operations that trigger loading:
 ├─ Product analysis (UPLOAD → BRAND_SEARCH)
 ├─ Brand search (BRAND_SEARCH → SELECT_REFERENCES)
 ├─ Image generation (GENERATE step)
-├─ Aesthetic manifesto creation (GENERATE → MOODBOARD)
+├─ Aesthetic guide creation (GENERATE → MOODBOARD)
 └─ Image remix (MOODBOARD step)
 ```
 
@@ -362,7 +362,7 @@ Minimum Requirements to Progress:
 ├─ BRAND_SEARCH → SELECT_REFERENCES: Brand searched ✓
 ├─ SELECT_REFERENCES → GENERATE: 5+ images selected ✓
 ├─ GENERATE → MOODBOARD: 5+ images in moodboard ✓
-└─ MOODBOARD: Aesthetic manifesto generated ✓
+└─ MOODBOARD: Aesthetic guide generated ✓
 
 Optional Actions:
 ├─ Regenerate images (unlimited)

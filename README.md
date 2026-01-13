@@ -4,7 +4,7 @@
 
 # AestheticAI Moodboard Builder
 
-Purpose: help non-designers visualize their brand through AI-curated moodboards. Users upload a product image (or use the sample), pick brands they like (e.g., “Apple”), select reference images, and the app generates on-brand variations plus an aesthetic manifesto—no need to know design jargon.
+Purpose: help non-designers visualize their brand through AI-curated moodboards. Users upload a product image (or use the sample), pick brands they like (e.g., “Apple”), select reference images, and the app generates on-brand variations plus an aesthetic guide—no need to know design jargon.
 
 ## Run Locally
 
@@ -16,5 +16,9 @@ Purpose: help non-designers visualize their brand through AI-curated moodboards.
 
 ## Notes
 - Sample product: click “Use Sample Product” on the upload step to skip analysis (served from `public/stanley.webp`).
-- Test Mode toggle (under the logo): switches to cheaper/abridged flows for analysis and the final aesthetic guide.
+- Test Mode toggle (under the logo): switches to cheaper/abridged flows for:
+  - **Product Analysis** (Step 1): Uses lighter model/prompt.
+  - **Aesthetic Guide** (Step 5): Generates a shorter summary.
+  - *Note: Brand Search and Image Generation use production models in both modes.*
 - Generation produces 6 images per batch so you can meet the 5-image moodboard minimum. Use like/unlike to curate.
+- See `src/services/gemini/geminiModels.ts` for model policy and configuration details.

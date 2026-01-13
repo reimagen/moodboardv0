@@ -1,5 +1,5 @@
-import { getAI } from "../clients/gemini/geminiClient";
-import { GEMINI_MODELS } from "../clients/gemini/geminiModels";
+import { getAI } from "./gemini/geminiClient";
+import { GEMINI_MODELS } from "./gemini/geminiModels";
 
 // Full-length aesthetic guide using moodboard images and contextual analyses
 export const generateAestheticGuide = async (
@@ -13,7 +13,7 @@ export const generateAestheticGuide = async (
     contents: [
       {
         text: [
-          `You are creating an aesthetic manifesto for a brand moodboard.`,
+          `You are creating an aesthetic guide for a brand moodboard.`,
           `Brand: ${context.brandName || "Unknown"}.`,
           `Product analysis: ${context.productAnalysis || "N/A"}.`,
           `Brand analysis: ${context.brandAnalysis || "N/A"}.`,

@@ -1,12 +1,9 @@
 import React, { useRef } from "react";
+import { useProduct } from "../contexts/ProductContext";
 
-type UploadStepProps = {
-  onUpload: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void> | void;
-  onUseDefault?: () => void;
-};
-
-const UploadStep: React.FC<UploadStepProps> = ({ onUpload, onUseDefault }) => {
+const UploadStep: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { handleFileUpload, useDefaultProduct } = useProduct();
 
   const handleCardClick = () => {
     fileInputRef.current?.click();
@@ -14,7 +11,7 @@ const UploadStep: React.FC<UploadStepProps> = ({ onUpload, onUseDefault }) => {
 
   const handleUseDefault = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onUseDefault?.();
+    useDefaultProduct();
   };
 
   return (
@@ -26,7 +23,7 @@ const UploadStep: React.FC<UploadStepProps> = ({ onUpload, onUseDefault }) => {
         <input
           ref={fileInputRef}
           type="file"
-          onChange={onUpload}
+          onChange={handleFileUpload}
           className="hidden"
           accept="image/*"
         />
@@ -38,7 +35,7 @@ const UploadStep: React.FC<UploadStepProps> = ({ onUpload, onUseDefault }) => {
             <h2 className="text-2xl font-bold text-gray-900">Upload Product</h2>
             <p className="text-gray-400 mt-2 italic max-w-sm mx-auto">Identify design DNA and start the mapping process.</p>
           </div>
-          {onUseDefault && (
+          {useDefaultProduct && (
             <div className="pt-6">
               <button
                 type="button"
