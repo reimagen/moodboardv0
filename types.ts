@@ -20,6 +20,6 @@ export enum AppStep {
   UPLOAD = 'upload',
   BRAND_SEARCH = 'brand_search',
   SELECT_REFERENCES = 'select_references',
-  GENERATE = 'generate',
-  MOODBOARD = 'moodboard'
+  GENERATE = 'generate', // Step 4: Generate Moodboard
+  MOODBOARD = 'moodboard' // Step 5: Aesthetics Guide
 }
