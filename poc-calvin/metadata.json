@@ -1,0 +1,7 @@
+{
+  "name": "AestheticAI Moodboard Builder",
+  "description": "Professional moodboard creation tool that generates brand-referenced images based on product uploads and reference brands, featuring AI image editing and aesthetic summarization.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
