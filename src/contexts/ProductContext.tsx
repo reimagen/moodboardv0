@@ -22,20 +22,16 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setLoading(isUploading);
     }, [isUploading, setLoading]);
     
-    const handleFileUploadAndNavigate = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileUploadAction = async (e: React.ChangeEvent<HTMLInputElement>) => {
         await handleFileUpload(e);
-        if (product) {
-            setStep(AppStep.BRAND_SEARCH);
-        }
     }
 
-    const useDefaultProductAndNavigate = () => {
+    const useDefaultProductAction = () => {
         useDefaultProduct();
-        setStep(AppStep.BRAND_SEARCH);
     }
 
     return (
-        <ProductContext.Provider value={{ product, productAnalysis, isUploading, handleFileUpload: handleFileUploadAndNavigate, useDefaultProduct: useDefaultProductAndNavigate }}>
+        <ProductContext.Provider value={{ product, productAnalysis, isUploading, handleFileUpload: handleFileUploadAction, useDefaultProduct: useDefaultProductAction }}>
             {children}
         </ProductContext.Provider>
     );

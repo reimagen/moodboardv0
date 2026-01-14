@@ -10,7 +10,7 @@ export const analyzeProductImageTest = async (base64Image: string): Promise<stri
       parts: [
         { inlineData: { data: base64Image.split(",")[1], mimeType: "image/png" } },
         {
-          text: "Briefly list 3 bullet points: key design features, primary material cues, and 1-2 matching high-end brands. Keep it short for testing.",
+          text: "Briefly list 3 bullet points: key design features, primary material cues. Then, list 5 brands that have similar aesthetics, along with their industry/category. Keep it short for testing.",
         },
       ],
     },

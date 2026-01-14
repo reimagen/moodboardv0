@@ -12,12 +12,12 @@
 
 ```mermaid
 flowchart TD
-    Start([User Lands on App]) --> Upload[Step 1: UPLOAD<br/>Upload Product Image]
+    Start([User Lands on App]) --> AnalyzeAesthetic[Step 1: ANALYZE_AESTHETIC<br/>Analyze Product Aesthetic]
 
-    Upload --> AutoAnalyze{AI Analyzes<br/>Product<br/>Gemini 3 Pro}
-    AutoAnalyze -->|Automatic| Brand[Step 2: BRAND_SEARCH<br/>Enter Brand Name]
+    AnalyzeAesthetic --> AutoAnalyze{AI Analyzes<br/>Product<br/>Gemini 3 Pro}
+    AutoAnalyze --> FindInspiration[Step 2: FIND_INSPIRATION<br/>Find Inspiration]
 
-    Brand --> UserSearch[User Enters Brand<br/>e.g. Apple, Prada]
+    FindInspiration --> UserSearch[User Enters Brand<br/>e.g. Apple, Prada / Selects Suggested]
     UserSearch --> AISearch{AI Searches Brand<br/>Gemini 3 Flash<br/>+ Google Search}
     AISearch -->|Generates 6 refs| Select[Step 3: SELECT_REFERENCES<br/>Choose 5+ Images]
 
@@ -35,11 +35,11 @@ flowchart TD
 
     CheckMoodboard -->|No| CheckRegenerate{Regenerate<br/>More Images?}
     CheckRegenerate -->|Yes, New Config| Generate
-    CheckRegenerate -->|Change Brand| Select
+    CheckRegenerate -->|Change Brand| FindInspiration
     CheckMoodboard -->|Yes| Synthesize[User Clicks<br/>Synthesize Aesthetic Guide]
 
     Synthesize --> AIManifesto{AI Generates<br/>Aesthetic Summary<br/>Gemini 2.5 Flash Lite}
-    AIManifesto -->|Automatic| Moodboard[Step 5: MOODBOARD<br/>Final View]
+    AIManifesto --> Moodboard[Step 5: MOODBOARD<br/>Final View]
 
     Moodboard --> OptRemix{Optional:<br/>AI Remix Images?}
     OptRemix -->|Yes| RemixAI{Edit with Prompt<br/>Gemini 2.5 Flash Image}
@@ -52,8 +52,8 @@ flowchart TD
 
     style Start fill:#e1f5e1
     style End fill:#ffe1e1
-    style Upload fill:#e3f2fd
-    style Brand fill:#e3f2fd
+    style AnalyzeAesthetic fill:#e3f2fd
+    style FindInspiration fill:#e3f2fd
     style Select fill:#e3f2fd
     style Generate fill:#fff3e0
     style Moodboard fill:#f3e5f5
@@ -73,19 +73,20 @@ flowchart TD
 │                         USER FLOW PROGRESSION                            │
 └─────────────────────────────────────────────────────────────────────────┘
 
-    ┌──────────────┐
-    │   STEP 1     │
-    │   UPLOAD     │  → Upload product image
-    │              │  → AI analyzes automatically
-    └──────┬───────┘
-           │ (automatic transition)
-           ▼
-    ┌──────────────┐
-    │   STEP 2     │
-    │ BRAND_SEARCH │  → Enter brand name
-    │              │  → AI searches + generates 6 references
-    └──────┬───────┘
-           │ (manual: click "Search")
+    ┌─────────────────┐
+    │     STEP 1      │
+    │ ANALYZE AESTHETIC │  → Analyze product image
+    │                 │  → Get aesthetic analysis
+    │                 │  → Receive brand suggestions
+    └───────┬─────────┘
+            │ (manual: click "Find Inspiration")
+            ▼
+    ┌─────────────────┐
+    │     STEP 2      │
+    │ FIND INSPIRATION │  → Explore suggested brands
+    │                 │  → Search for new brands
+    └───────┬─────────┘
+            │ (manual: click "Search")
            ▼
     ┌──────────────┐
     │   STEP 3     │
@@ -115,31 +116,33 @@ flowchart TD
 
 ## Detailed Step Breakdown
 
-### Step 1: UPLOAD
+### Step 1: ANALYZE_AESTHETIC
 **File**: `src/components/UploadStep.tsx`
 
 **User Actions**:
 - Drag-drop or click to upload product image
-- Wait for AI analysis
+- Click "Use Sample Product"
+- Review "Your Aesthetic Anchor" (product image + analysis)
+- Click "Find Inspiration" button to proceed
 
 **System Actions**:
-- AI analyzes image using `analyzeProductImage()` (Gemini 3 Pro)
-- Extracts: design features, materials, brand compatibility
-- Auto-advances to BRAND_SEARCH
+- AI analyzes product image using `analyzeProductImage()` (Gemini 3 Pro)
+- Extracts: key design features, primary material cues, aesthetic analysis
+- Automatically fetches initial brand suggestions (parsed from analysis or via backup Gemini call)
 
-**Exit Condition**: Automatic after successful analysis
+**Exit Condition**: Manual click on "Find Inspiration" button
 
 ---
 
-### Step 2: BRAND_SEARCH
-**File**: `src/components/BrandSearchStep.tsx`
+### Step 2: FIND_INSPIRATION
+**File**: `src/components/FindInspirationStep.tsx`
 
 **Layout**:
-- Left panel: Uploaded product + AI analysis
-- Right panel: Brand search interface
+- Brand search interface with suggested brands (from product analysis or backup)
 
 **User Actions**:
-- Enter brand name (e.g., "Apple", "Prada", "Rimowa")
+- Select a suggested brand button
+- OR Enter brand name (e.g., "Apple", "Prada", "Rimowa")
 - Click "Search" button
 
 **System Actions**:
@@ -226,12 +229,12 @@ flowchart TD
 └─────────────────────────────────────────────────────────────────┘
 
 PRIMARY FLOW (One-Way):
-UPLOAD → BRAND_SEARCH → SELECT_REFERENCES → GENERATE → MOODBOARD
+ANALYZE_AESTHETIC → FIND_INSPIRATION → SELECT_REFERENCES → GENERATE → MOODBOARD
 
 BACKWARD NAVIGATION:
 ┌─────────────────────────────────────────────────────────────────┐
 │ • "Change References" (from GENERATE → SELECT_REFERENCES)       │
-│ • "Reset Session" (from any step → UPLOAD)                      │
+│ • "Reset Session" (from any step → ANALYZE_AESTHETIC)           │
 │ • NO traditional back button                                     │
 │ • NO URL-based routing                                          │
 └─────────────────────────────────────────────────────────────────┘
@@ -245,8 +248,8 @@ BACKWARD NAVIGATION:
 
 | Interaction | Description | Location |
 |-------------|-------------|----------|
-| **File Upload** | Drag-drop or click to upload | UPLOAD step |
-| **Text Input** | Enter brand name | BRAND_SEARCH step |
+| **File Upload** | Drag-drop or click to upload | ANALYZE_AESTHETIC step |
+| **Text Input** | Enter brand name | FIND_INSPIRATION step |
 | **Image Selection** | Click to toggle (multi-select) | SELECT_REFERENCES step |
 | **Rating** | Thumbs up/down buttons | GENERATE step |
 | **Configuration** | Toggle aspect ratio/resolution | GENERATE step |
@@ -263,12 +266,15 @@ BACKWARD NAVIGATION:
 │                    AI MODELS USED (5 Total)                    │
 └────────────────────────────────────────────────────────────────┘
 
-Step 1: UPLOAD
+Step 1: ANALYZE_AESTHETIC
 ├─→ analyzeProductImage()
 │   └─→ Gemini 3 Pro (gemini-exp-1206)
 │       └─→ Extracts design features, materials, brand compatibility
+├─→ getBackupBrandSuggestions() (if parsing fails)
+│   └─→ Gemini 3 Flash (or similar)
+│       └─→ Suggests brands based on analysis
 
-Step 2: BRAND_SEARCH
+Step 2: FIND_INSPIRATION
 ├─→ searchBrandReferences()
 │   └─→ Gemini 3 Flash (gemini-2.0-flash-exp)
 │       └─→ Google Search integration
@@ -341,8 +347,8 @@ When AI is processing:
 └─ Disappears when operation completes
 
 AI Operations that trigger loading:
-├─ Product analysis (UPLOAD → BRAND_SEARCH)
-├─ Brand search (BRAND_SEARCH → SELECT_REFERENCES)
+├─ Product analysis (ANALYZE_AESTHETIC)
+├─ Brand search (FIND_INSPIRATION → SELECT_REFERENCES)
 ├─ Image generation (GENERATE step)
 ├─ Aesthetic guide creation (GENERATE → MOODBOARD)
 └─ Image remix (MOODBOARD step)
@@ -358,8 +364,8 @@ AI Operations that trigger loading:
 └────────────────────────────────────────────────────────────────┘
 
 Minimum Requirements to Progress:
-├─ UPLOAD → BRAND_SEARCH: Product uploaded + analyzed ✓
-├─ BRAND_SEARCH → SELECT_REFERENCES: Brand searched ✓
+├─ ANALYZE_AESTHETIC: Product uploaded + analyzed ✓
+├─ FIND_INSPIRATION → SELECT_REFERENCES: Brand searched ✓
 ├─ SELECT_REFERENCES → GENERATE: 5+ images selected ✓
 ├─ GENERATE → MOODBOARD: 5+ images in moodboard ✓
 └─ MOODBOARD: Aesthetic guide generated ✓
@@ -379,8 +385,8 @@ Optional Actions:
 src/
 ├── App.tsx                          # Main app logic & state
 ├── components/
-│   ├── UploadStep.tsx              # Step 1: Upload interface
-│   ├── BrandSearchStep.tsx         # Step 2: Brand search
+│   ├── UploadStep.tsx              # Step 1: Analyze Aesthetic interface
+│   ├── FindInspirationStep.tsx     # Step 2: Find Inspiration
 │   ├── ReferenceSelectionStep.tsx  # Step 3: Image selection
 │   ├── GenerateStep.tsx            # Step 4: Generation & rating
 │   └── MoodboardStep.tsx           # Step 5: Final view
@@ -390,7 +396,7 @@ src/
     └── index.ts                    # TypeScript type definitions
 
 Key Types:
-├─ AppStep: enum (UPLOAD | BRAND_SEARCH | SELECT_REFERENCES | GENERATE | MOODBOARD)
+├─ AppStep: enum (ANALYZE_AESTHETIC | FIND_INSPIRATION | SELECT_REFERENCES | GENERATE | MOODBOARD)
 ├─ AspectRatio: "1:1" | "16:9" | "9:16" | "4:3"
 ├─ Resolution: "1K" | "2K" | "4K"
 └─ GeneratedImage: { url, liked, config }
@@ -418,8 +424,8 @@ The application is a **collaborative creative tool** where users provide strateg
 
 | Phase | Time | User Effort |
 |-------|------|-------------|
-| UPLOAD | 30 sec | Low (just upload) |
-| BRAND_SEARCH | 1 min | Low (enter brand name) |
+| ANALYZE_AESTHETIC | 30 sec | Low (analyze aesthetic) |
+| FIND_INSPIRATION | 1 min | Low (explore/search brands) |
 | SELECT_REFERENCES | 1 min | Medium (5+ selections) |
 | GENERATE | 5-10 min | High (iterative curation) |
 | MOODBOARD | 1-3 min | Low (review + optional remix) |
@@ -430,7 +436,6 @@ The application is a **collaborative creative tool** where users provide strateg
 ## Future Enhancement Opportunities
 
 Potential UX improvements based on flow analysis:
-- Add breadcrumb navigation to show current step
 - Save/export functionality for moodboards
 - History feature to revisit previous moodboards
 - Undo/redo for selections and ratings
@@ -442,5 +447,4 @@ Potential UX improvements based on flow analysis:
 ---
 
 **Last Updated**: 2026-01-11
-**Project Location**: `C:\Users\Calvin\ai-projects\moodboardv0\poc-calvin`
 **Documentation**: This file provides the complete user flow for the AestheticAI Moodboard Builder application.

@@ -3,8 +3,8 @@ import { AppStep } from "../types";
 import { useFlowManager } from "../hooks/useFlowManager";
 
 const steps: { key: AppStep; label: string }[] = [
-  { key: AppStep.UPLOAD, label: "Upload" },
-  { key: AppStep.BRAND_SEARCH, label: "Brand Search" },
+  { key: AppStep.ANALYZE_AESTHETIC, label: "Analyze Aesthetic" },
+  { key: AppStep.FIND_INSPIRATION, label: "Find Inspiration" },
   { key: AppStep.SELECT_REFERENCES, label: "Select References" },
   { key: AppStep.GENERATE, label: "Generate Moodboard" },
   { key: AppStep.MOODBOARD, label: "Aesthetics Guide" },

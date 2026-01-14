@@ -18,7 +18,7 @@ interface SharedState {
 const SharedStateContext = createContext<SharedState | undefined>(undefined);
 
 export const SharedStateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [step, setStep] = useState<AppStep>(AppStep.UPLOAD);
+    const [step, setStep] = useState<AppStep>(AppStep.ANALYZE_AESTHETIC);
     const [loading, setLoading] = useState(false);
     const [stepHint, setStepHint] = useState<string | null>(null);
     const { useTestFlows, setUseTestFlows } = useTestMode();

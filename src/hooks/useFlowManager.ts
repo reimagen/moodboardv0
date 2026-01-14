@@ -15,9 +15,9 @@ export const useFlowManager = () => {
 
     const isStepReady = (target: AppStep) => {
         switch (target) {
-            case AppStep.UPLOAD:
-                return true;
-            case AppStep.BRAND_SEARCH:
+            case AppStep.ANALYZE_AESTHETIC:
+                return Boolean(product);
+            case AppStep.FIND_INSPIRATION:
                 return Boolean(product);
             case AppStep.SELECT_REFERENCES:
                 return brandRefs.length > 0;
@@ -32,8 +32,10 @@ export const useFlowManager = () => {
 
     const getStepHint = (target: AppStep) => {
         switch (target) {
-            case AppStep.BRAND_SEARCH:
-                return "You must upload and analyze a product before brand search.";
+            case AppStep.ANALYZE_AESTHETIC:
+                return "You must upload and analyze a product to proceed.";
+            case AppStep.FIND_INSPIRATION:
+                return "You must upload and analyze a product before finding inspiration.";
             case AppStep.SELECT_REFERENCES:
                 return "You must search a brand to load references.";
             case AppStep.GENERATE:

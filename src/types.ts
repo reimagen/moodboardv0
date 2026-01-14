@@ -16,9 +16,14 @@ export interface GenerationResult {
   status: 'pending' | 'liked' | 'disliked' | 'none';
 }
 
+export interface BrandSuggestion {
+  name: string;
+  category: string;
+}
+
 export enum AppStep {
-  UPLOAD = 'upload',
-  BRAND_SEARCH = 'brand_search',
+  ANALYZE_AESTHETIC = 'analyze_aesthetic',
+  FIND_INSPIRATION = 'find_inspiration',
   SELECT_REFERENCES = 'select_references',
   GENERATE = 'generate', // Step 4: Generate Moodboard
   MOODBOARD = 'moodboard' // Step 5: Aesthetics Guide

@@ -1,7 +1,7 @@
 # System Architecture Assessment — AestheticAI Moodboard Builder
 
 ## Fit for Purpose
-- Linear SPA flow (upload → brand search → select references → generate → moodboard) aligns with goal of guiding non-designers through aesthetic curation without prompt-crafting.
+- Linear SPA flow (analyze aesthetic → find inspiration → select references → generate → moodboard) aligns with goal of guiding non-designers through aesthetic curation without prompt-crafting.
 - Model choices map to tasks (analysis, brand search, generation, summary, remix) and enforce minimum curation (≥5 refs, ≥5 moodboard images) to keep results grounded in user taste.
 
 ## Strengths
@@ -43,7 +43,7 @@
 ## State Machine Plan (Hackathon vs. Production)
 
 ### Hackathon (fast path)
-- Implement a lean reducer or xstate-lite machine in `src/App.tsx` covering steps: `UPLOAD → BRAND_SEARCH → SELECT_REFERENCES → GENERATE → MOODBOARD`.
+- Implement a lean reducer or xstate-lite machine in `src/App.tsx` covering steps: `ANALYZE_AESTHETIC → FIND_INSPIRATION → SELECT_REFERENCES → GENERATE → MOODBOARD`.
 - Events: `UPLOAD_SUCCESS(productAnalysis)`, `BRAND_SEARCH_SUCCESS(refs)`, `SELECT_REFS_DONE(selected)`, `GEN_BATCH_READY(images)`, `MOODBOARD_READY(summary)`, `RESET`, `BACK_TO_SELECT`.
 - Guards: enforce `>=5 references` and `>=5 moodboard images` before advancing; disable generate/synthesize buttons when guard fails.
 - Side effects: trigger AI calls as actions; set per-step `isLoading` and `error`; offer simple retry on failure.
